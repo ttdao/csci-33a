@@ -1,2 +1,2 @@
 # csci-33a
-CSCI-33A Assignments 2021
+CSCI-33A Assignments 2022
