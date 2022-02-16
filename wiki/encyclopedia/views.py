@@ -19,30 +19,24 @@ def entry(request, title):
     })
 
 # Class to create form instance
-class SearchTerm(forms.Form)
-    term = forms.CharField(label="Search Term")
+#class SearchTerm(forms.Form):
+#   term = forms.CharField(label="Search Term")
 
 # Find entry in search bar. If query does not match, show search results 
 # Clicking an entry in the search results screen will take them to the page
 def search(request):
     entries = util.list_entries()
-
-    # If method is POST
-    if request.method == "POST":
-
-        # Take in client-side search term
-        term = SearchTerm(request.post)
-
-        # Check if it exists on server-side
-        if form.is_valid():
-
+    
+    # If method is GET
+    if request.method == "GET":
+        search_term = request.GET.get('q')
         # Go to page with search term
         return render(request, "encyclopedia/entry.html", {
-            "entries": util.get_entry(term)
+            "entries": util.get_entry(search_term)
             })
+
     
-    
-    else:
+    #else:
 
     # Take term as substring
     # Compare to each entry in list of entries - look at python lesson
