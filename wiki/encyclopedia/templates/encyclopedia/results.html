@@ -9,8 +9,8 @@
 
     <body>
      <ul>
-        {% for entry in entries %}
-            {# <li>{{ entry }}</li> #}
+        {% for term in entries %}
+            {# <li>{{ term }}</li> #}
             <li>
                 <a href="{% url 'encyclopedia:title' entry %}">{{ entry }}</a>
             </li>
