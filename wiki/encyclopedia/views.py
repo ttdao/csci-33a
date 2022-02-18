@@ -14,7 +14,7 @@ def index(request):
 
 # Shows entry if exists. Shows a different page if 404
 def entry(request, title):
-    if  not(util.get_entry(title)):
+    if not(util.get_entry(title)):
         return render(request, "encyclopedia/pagenotfound.html")
     else:        
         return render(request, "encyclopedia/entry.html", {
@@ -34,7 +34,7 @@ def search(request):
     results = list()
 
     # Get term from search bar
-    term = request.GET.get('q')
+    term = request.GET.get('q','')
 
     # If search term is found in the entries, show entry
     if term.lower() in entries:
@@ -58,7 +58,6 @@ def search(request):
                 "entries": results
                 })
     else:
-    
     # No page found placeholder
         return render(request, "encyclopedia/pagenotfound.html", {
             "entries": util.get_entry(search_term)

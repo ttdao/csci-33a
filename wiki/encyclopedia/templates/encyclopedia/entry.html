@@ -11,10 +11,10 @@
    
         {% for entry in entries %}
             {{ entry }}
-            {{ convert }}
+
         {% endfor %}
     </body>
 
-    
+     {{ convert | safe }}
     
 {% endblock %}

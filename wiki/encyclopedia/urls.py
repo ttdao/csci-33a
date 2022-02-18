@@ -8,6 +8,6 @@ urlpatterns = [
     path("", views.index, name="index"),
     # /wiki/title
     path("<str:title>", views.entry, name="title"),
-    # /search
-    path("search", views.search, name="search"),
+    # wiki/search
+    path("search/", views.search, name="search"),
 ]
