@@ -94,7 +94,7 @@ def new(request):
     if request.method == "POST":
 
         # Take in data and save as form
-        form = CreateNewPage(request.post)
+        form = CreateNewPage(request.POST)
 
         # Check if form is valid
         if form.is_valid():
@@ -115,16 +115,16 @@ def new(request):
             else:
                 util.save_entry(title, content)
 
-                # Perform markdown
-                entry = util.get_entry(title)
-                entry_markdown = md.convert(entry)
+            # Go to newly created page
+                return HttpResponseRedirect("/wiki/" + title)
 
-                # Go to newly created page
-                return render(request, "encyclopedia/entry.html"), {
-                    "title": title,
-                    "entries": entry_markdown
-                }
-    # Go to create new page
+        # if form is INVALID, re-render the page with existing information
+        else:
+            return render(request, "encyclopedia/new.html",{
+                "form": form,
+            })
+
+    # If method is GET, go to create new page
     else:
         return render(request, "encyclopedia/new.html", {
             "form": CreateNewPage()
@@ -138,7 +138,7 @@ def rand(request):
     # Pick number between 0 and length of entries list
     index = random.randint(0, len(entries) - 1)
 
-    # Store title into num
+    # Store title
     random_title = entries[index]
 
     # Perform markdown
@@ -154,7 +154,7 @@ def rand(request):
 def edit(request, title):
 
     # Check to see if method is GET
-    if request.method == "get":
+    if request.method == "GET":
 
         # Get the title
         title = request.GET.get['title']
