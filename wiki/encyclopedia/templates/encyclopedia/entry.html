@@ -5,16 +5,10 @@
 {% endblock %}
 
 {% block body %}
-    <h1>{{ title }}</h1>
 
-    <body>
-   
-        {% for entry in entries %}
-            {{ entry }}
+   <div class="entry">
+       {{ content | safe }}
+       <a class="edit" href="wiki/edit/{{ title }}">Edit Entry</a>
+   </div>
 
-        {% endfor %}
-    </body>
-
-     {{ convert | safe }}
-    
 {% endblock %}
