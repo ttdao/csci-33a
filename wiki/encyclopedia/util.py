@@ -22,15 +22,15 @@ def save_entry(title, content):
     filename = f"entries/{title}.md"
     if default_storage.exists(filename):
         default_storage.delete(filename)
-    default_storage.save(filename, ContentFile(''))
-    f = open(filename, 'a')
-    newline = '\n'
-    f.write(
-        f'#{title}'
-        f'{newline}'
-        f'{content}'
-    )
-    f.close()
+    default_storage.save(filename, ContentFile(content))
+    # f = open(filename, 'a')
+    # newline = '\n'
+    # f.write(
+    #     f'#{title}'
+    #     f'{newline}'
+    #     f'{content}'
+    # )
+    # f.close()
 
 
 def get_entry(title):

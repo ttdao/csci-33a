@@ -13,7 +13,7 @@ urlpatterns = [
     # wiki/new
     path("new/", views.new, name="new"),
     # wiki/
-    path("wiki/", views.rand, name="random"),
-    # /edit
-    path("/edit/<str:title>", views.edit, name="edit"),
+    path("random/", views.rand, name="rand"),
+    # wiki/edit
+    path("edit/<str:title>", views.edit, name="edit"),
 ]

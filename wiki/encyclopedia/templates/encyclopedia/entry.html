@@ -1,14 +1,14 @@
 {% extends "encyclopedia/layout.html" %}
 
 {% block title %}
-{{ Title }}
+    {{ Title }}
 {% endblock %}
 
 {% block body %}
 
    <div class="entry">
        {{ content | safe }}
-       <a class="edit" href="wiki/edit/{{ title }}">Edit Entry</a>
+       <a class="edit" href="{% url 'encyclopedia:edit' title %}">Edit Entry</a>
    </div>
 
 {% endblock %}
