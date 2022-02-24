@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Advanced Search</title>
+    <style>
+        .center {
+            text-align: center;
+            margin: 0 auto;
+            width: 80%;
+        }
+
+        #logo {
+            height: 24px;
+            width: 74px;
+            display: inline-block;
+            vertical-align: middle;
+            cursor: pointer;
+            margin-left: 5px;
+            padding-left: 10px;
+            border: 10px;
+        }
+
+        .right {
+            text-align: right;
+        }
+
+        a {
+            display: inline-block;
+            font-family: arial, sans-serif;
+            font-size: 13px;
+            cursor: pointer;
+            color: rgba(0, 0, 0, .87);
+        }
+
+        a:link,
+        a:visited {
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        p.title {
+            font-family: Roboto, Arial, sans-serif;
+            color: #d93025;
+            margin-left: 5px;
+            font-size: 20px;
+            margin-bottom: 0px;
+            margin-top: 0px;
+        }
+
+        p.hl,
+        body {
+            font-family: Roboto, Arial, sans-serif;
+        }
+
+        p.hl {
+            height: 30px;
+            font-size: 16px;
+            display: table-cell;
+            vertical-align: middle;
+        }
+
+        p.hr {
+            display: table-cell;
+            text-align: right;
+            font-size: 13px;
+            font-weight: 700;
+            color: #777;
+        }
+
+        p.pr {
+            vertical-align: middle;
+            /* text-align: right; */
+            color: #555;
+            font-size: 11px;
+            padding-left: 20px;
+            display: flex;
+        }
+
+        @media only screen and (max-width: 1056px) {
+
+            p.pr,
+            p.hr,
+            span.param {
+                display: none;
+            }
+
+            .text {
+                width: auto;
+            }
+        }
+
+        p.border {
+            border-style: solid none none none;
+            border-top: 1px solid #ebebeb;
+        }
+
+        input[type=text] {
+            border-top: 1px solid #c0c0c0;
+            border: 1px solid #d9d9d9;
+            /* width: auto; */
+            width: 100%;
+            text-align: left;
+            border-radius: 1px;
+            font-size: 13px;
+            height: 25px;
+            padding: 1px 8px 1px 8px;
+            display: block;
+            display: table-cell;
+        }
+
+        input[type=text]:active {
+            border: 1px solid rgba(189, 189, 189, 0.87);
+        }
+
+        input[type=text]:focus {
+            border: 1px solid rgba(31, 115, 241, 0.87);
+        }
+
+
+        input[type=submit] {
+            background: #4d90fe;
+            background-image: -webkit-linear-gradient(top, #4d90fe, #4787ed);
+            border: 1px solid #3079ed;
+            color: #fff;
+            border-radius: 2px;
+            cursor: default;
+            font-size: 11px;
+            font-weight: bold;
+            text-align: center;
+            white-space: nowrap;
+            padding: 0 8px;
+            margin: 10px 1px 10px 1px;
+            min-width: 120px;
+            height: 30px;
+        }
+
+        .labels {
+            line-height: 16px;
+            font-size: 13px;
+            font-style: inherit;
+            margin: 0px;
+            vertical-align: middle;
+            display: table-cell;
+            min-width: 167px;
+            text-align: left;
+        }
+
+        .text {
+            width: 60%;
+        }
+
+        label {
+            cursor: default;
+            font-size: 13px;
+        }
+
+        .format {
+            margin: 20px;
+            padding: 10px;
+            padding-top: 30px;
+        }
+
+        span.param {
+            color: #666;
+            font-family: monospace;
+            font-size: 11px;
+            /* white-space: pre; */
+            padding-left: 20px;
+            /* display:flex; */
+        }
+
+        .specialparam {
+            color: #666;
+            font-family: monospace;
+            font-size: 11px;
+            padding-left: 0px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="right">
+        <a href="imagesearch.html">Images</a>
+        <a href="advancedsearch.html">Advanced Search</a>
+    </div>
+    <a href="index.html"><img id="logo" src="glogo.png" alt="Google"></a>
+    <div class="format">
+        <form action="https://www.google.com/search">
+            <p class="title">Advanced Search</p>
+    </div>
+    <p class="border"></p>
+    <div class="format">
+        <table id="criteria">
+            <tr>
+                <td>
+                    <p class="hl">Find pages with...</p>
+                </td>
+                <td>
+                    <p></p>
+                </td>
+                <td>
+                    <p class="hr">To do this in the search box</p>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="all">all these words:</label></td>
+                <td class="text"><input type="text" name="as_q"></td>
+                <td>
+                    <p class="pr">Type the important words:<span class="param">tricolor rat terrier</span></p>
+
+                </td>
+            </tr>
+            <tr>
+                <td><label for="this">this exact word or phrase:</label></td>
+                <td class="text"><input type="text" name="as_epq"></td>
+                <td>
+                    <p class="pr">Put exact words in quotes:<span class="param">"rat terrier"</span></p>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="any">any of these words:</label></td>
+                <td class="text"><input type="text" name="as_oq"></td>
+                <td>
+                    <p class="pr">Type OR between all the words you want: </p>
+                    <span class="param">miniature OR standard</p>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="none">none of these words:</label></td>
+                <td class="text"><input type="text" name="as_eq"></td>
+                <td>
+                    <p class="pr">Put a minus sign just before words you don't want:</p>
+                    <span class="param">-rodent, -"Jack Russell"</p>
+                </td>
+            </tr>
+        </table>
+
+        <input type="hidden" id="advsearch" name="as_nlo">
+        <input type="hidden" id="advsearch" name="as_nhi">
+        <input type="hidden" id="advsearch" name="lr">
+        <input type="hidden" id="advsearch" name="cr">
+        <input type="hidden" id="advsearch" name="as_qdr" value="all">
+        <input type="hidden" id="advsearch" name="as_sitesearch">
+        <input type="hidden" id="advsearch" name="as_occt" value="any">
+        <input type="hidden" id="advsearch" name="safe" value="images">
+        <input type="hidden" id="advsearch" name="as_filetype">
+        <input type="hidden" id="advsearch" name="tbs">
+        <div class="center">
+            <input type="submit" value="Advanced Search">
+        </div>
+        </form>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Google</title>
+    <style>
+        .center {
+            text-align: center;
+            margin: 0 auto;
+            width: 80%;
+        }
+
+        .right {
+            text-align: right;
+            /* float: right; */
+        }
+
+        a {
+            display: inline-block;
+            font-family: arial, sans-serif;
+            font-size: 13px;
+            cursor: pointer;
+            color: rgba(0, 0, 0, .87);
+        }
+
+        a:link,
+        a:visited {
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        #logo {
+            /* text-align: center; */
+            max-height: 100%;
+            max-width: 100%;
+            width: auto;
+            object-fit: contain;
+            object-position: center bottom;
+            padding-top: 100px;
+            padding-bottom: 80px;
+        }
+
+        input[type=text] {
+            border-radius: 25px;
+            border: 1px solid #dfe1e5;
+            width: 100%;
+            font-size: 16px;
+            height: 34px;
+            background-color: transparent;
+            color: rgba(0, 0, 0, .87);
+            display: block;
+            max-width: 2048px;
+            margin-top: -37px;
+            padding: 0px 20px 0px 20px;
+        }
+
+        input[type=text]:hover {
+            border: 1px solid rgba(189, 189, 189, 0.87);
+        }
+
+        input[type=submit] {
+            border-radius: 4px;
+            background-color: #f8f9fa;
+            border: 1px solid #f8f9fa;
+            color: #3c4043;
+            margin: 11px 4px;
+            font-family: Roboto, arial, sans-serif;
+            font-size: 14px;
+            height: 36px;
+            min-width: 54px;
+            line-height: 27px;
+            text-align: center;
+            cursor: pointer;
+            padding: 1px 16px 1px 16px;
+            /* border: 1px 1px 1px 1px; */
+            margin: 11px 4px 11px 4px;
+        }
+
+        input[type=submit]:hover {
+            border: 1px solid rgba(189, 189, 189, 0.87);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="right">
+        <a href="imagesearch.html">Images</a>
+        <a href="advancedsearch.html">Advanced Search</a>
+    </div>
+    <div class="center">
+        <img id="logo" src="glogo.png" alt="Google" height="92" width="272">
+        <form action="https://google.com/search">
+            <input type="text" name="q">
+            <br>
+            <input type="submit" value="Google Search">
+            <input type="submit" value="I'm Feeling Lucky">
+        </form>
+    </div>
+    </div>
+</body>
+
+</html>
