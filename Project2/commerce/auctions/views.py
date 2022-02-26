@@ -3,8 +3,16 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from django import forms
 
 from .models import User
+
+
+class CreateListing(forms.Form):
+    listing_title = forms.CharField(label="Title")
+    starting_bid = forms.IntegerField(label="Starting Bid")
+    listing_pic = forms.CharField(label="Pic URL")  # input link here. placeholder
+    listing_category = forms.CharField(label="Category")  # ideally dropdown. placeholder
 
 
 def index(request):
@@ -61,3 +69,8 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "auctions/register.html")
+
+
+def create(request):
+    if request.method == "POST":
+        title = request.POST["title"]
