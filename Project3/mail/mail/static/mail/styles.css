@@ -2,9 +2,10 @@ textarea {
     min-height: 400px;
 }
 
+div, button
 /* will be bold */
 .email-unread {
-    border-color:black;
+    border-color:antiquewhite;
     border-style:solid;
     border-width: 1px;
     font-weight: bold;
@@ -23,8 +24,13 @@ textarea {
     text-align: right;
 }
 
-.email-unread:hover, .email-read:hover {
+/* make all emails line up */
+.wrapper {
+    display:grid;
+}
 
+.email-unread:hover, .email-read:hover {
+    background-color: lightgray;
 }
 
 

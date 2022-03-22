@@ -47,9 +47,6 @@ function load_email(id) {
     .then(response => response.json())
     .then(email => {
 
-      // Print emails
-      console.log(emails);
-
       // Show email
       const display = document.querySelector('#emails-view');
       display.innerHTML = `
@@ -261,7 +258,7 @@ function load_mailbox(mailbox) {
         }
 
         // Add listener to open email via ID
-        elemDiv.addEventListener('click', () => load_email(id));
+        elemDiv.addEventListener('click', () => load_email(email.id));
 
         // Append to DOM
         document.querySelector('#emails-view').appendChild(elemDiv);
