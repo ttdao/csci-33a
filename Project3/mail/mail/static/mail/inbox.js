@@ -164,24 +164,23 @@ function compose_email() {
  */
 
 function validate_fields() {
-  // const formSubmit = document.querySelector('form');
+
   const subjectField = document.querySelector('#compose-subject').value;
   const toField = document.querySelector('#compose-recipients').value;
 
-  // formSubmit.onsubmit = () => {
     if (toField.length == 0) {
       alert('You forgot to put in the recipient\'s email address!');
-      return false; //{
-        // submitEmail();
-      // }
+      return false;
     };
 
     if (subjectField.length == 0) {
       if (confirm('The Subject line is empty! Are you sure you want to continue?')) {
-        submitEmail();
-      };
-    }
-  }
+        submit_email(); 
+      } else {
+          return false;
+        }
+      }
+    };
 
 function submit_email() {
 
@@ -232,12 +231,6 @@ function load_mailbox(mailbox) {
   document.querySelector('#compose-view').style.display = 'none';
 
 
-  // mailbox = inbox, sent, or archive
-  // if mailbox = sent
-  // check if sender is yourself
-
-
-
   // Query to check to see if there are any emails first
   // Send a GET request to the URL
   fetch(`/emails/${mailbox}`)
@@ -254,18 +247,17 @@ function load_mailbox(mailbox) {
 
         // For each email, it gets its own div tag.. for now
         elemDiv.innerHTML = `
-              <div>${email['sender']}</div>
-              <div>${email['subject']} </div>
-              <div>${email['timestamp']} </div>
+              <div>${email['sender']} <span class="timestamp">${email['subject']} ${email['timestamp']} </span> </div>
+              
           `;
 
         // Change color if email is read or not
         // if unread then all divs are bold
 
         if (email.read) {
-          elemDiv.classList.add('read');
+          elemDiv.classList.add('email-read');
         } else {
-          elemDiv.classList.add('unread'); //Maybe be redundant. Set regular class to normal view 
+          elemDiv.classList.add('email-unread');
         }
 
         // Add listener to open email via ID

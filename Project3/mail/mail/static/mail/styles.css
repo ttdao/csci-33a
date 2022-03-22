@@ -1,3 +1,30 @@
 textarea {
     min-height: 400px;
 }
+
+/* will be bold */
+.email-unread {
+    border-color:black;
+    border-style:solid;
+    border-width: 1px;
+    font-weight: bold;
+}
+
+/* will be regular font */
+.email-read{
+    border-color:black;
+    border-style:solid;
+    border-width: 1px;
+    background-color: gray;
+    
+}
+
+.timestamp {
+    text-align: right;
+}
+
+.email-unread:hover, .email-read:hover {
+
+}
+
+
