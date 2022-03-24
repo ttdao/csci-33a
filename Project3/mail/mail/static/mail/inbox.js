@@ -50,11 +50,13 @@ function load_email(id) {
       // Show email
       const display = document.querySelector('#emails-view');
       display.innerHTML = `
+      <span>
           <div><b>From: </b> ${email['sender']}</div>
-          <div><b>To: </b>${email['recipient']} </div>
-          <div><b>Subject: </b>${email['subject']} </div>
-          <div><b>Time: </b>${email['timestamp']} </div>
-          <div><b>Body: </b>${email['body']}</div>
+          <div><b>To: </b>${email['recipient']}</div>
+          <div><b>Time: </b>${email['timestamp']}</div>
+          <div><b>Subject: </b>${email['subject']}</div>
+      </span>
+          <p class="border">${email['body']}</p>
           `;
 
       // Add PUT request to update the email is read
@@ -67,6 +69,7 @@ function load_email(id) {
 
       // Add reply button here and pre-fill the innerhtml
       replyButton = document.createElement('button');
+      replyButton.classList.add('btn', 'btn-sm', 'btn-outline-primary');
       replyButton.innerHTML = "Reply";
       replyButton.addEventListener('click', function () {
         compose_email();
@@ -96,16 +99,16 @@ function load_email(id) {
       On ${email['timestamp']}, ${email['sender']} wrote:
       `
         document.querySelector('#compose-body').value = body;
-
       })
-      // });
-      display.appendChild(replyButton);
+
+      display.prepend(replyButton);
 
       // Create Mark Unread Button
       // If email read is true, show mark unread button
       // Then go to inbox after
 
       markUnread = document.createElement('button');
+      markUnread.classList.add('btn', 'btn-sm', 'btn-outline-primary');
       markUnread.innerHTML = "Mark as Unread";
       markUnread.addEventListener('click', function () {
         // Add PUT request to update the email is false
@@ -116,13 +119,15 @@ function load_email(id) {
           })
             .then(response => load_mailbox('inbox'))
         })
+      })
 
-        display.appendChild(markUnread);
+        display.prepend(markUnread);
 
         // Create Archive button
         // Only applies to 'Inbox' and 'Archive' mailboxes. Not 'Sent'. 
         // After archive/unarchive, go to inbox
         markArchive = document.createElement('button');
+        markArchive.classList.add('btn', 'btn-sm', 'btn-outline-primary');
         markArchive.innerHTML = "Archive";
         markArchive.addEventListener('click', function () {
           // Add PUT request to update the email is archived or not
@@ -133,9 +138,8 @@ function load_email(id) {
             })
               .then(response => load_mailbox('inbox'))
           })
-          display.appendChild(markArchive);
         })
-      })
+        display.prepend(markArchive);
     })
 }
 /*
@@ -193,6 +197,7 @@ function submit_email() {
         recipients: toField,
         subject: subjectField,
         body: bodyMessage,
+        read: false,
       })
     })
         .then(response => response.json())
@@ -241,11 +246,15 @@ function load_mailbox(mailbox) {
 
         // Create div element
         const elemDiv = document.createElement('div');
+        
+
+        /* <div>${email['sender']} <span class="subject">${email['subject']}</span> <span class="timestamp">${email['timestamp']}</span></div>*/
 
         // For each email, it gets its own div tag.. for now
         elemDiv.innerHTML = `
-              <div>${email['sender']} <span class="timestamp">${email['subject']} ${email['timestamp']} </span> </div>
-              
+              <div><div id="email"> ${email['sender']}</div></div>
+              <div><div id="subject">${email['subject']}</div></div>
+              <div><div id="timestamp">${email['timestamp']}</div></div>   
           `;
 
         // Change color if email is read or not
@@ -253,8 +262,10 @@ function load_mailbox(mailbox) {
 
         if (email.read) {
           elemDiv.classList.add('email-read');
+          elemDiv.classList.add('wrapper-grid-container');
         } else {
           elemDiv.classList.add('email-unread');
+          elemDiv.classList.add('wrapper-grid-container');
         }
 
         // Add listener to open email via ID
