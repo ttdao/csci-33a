@@ -3,7 +3,7 @@ textarea {
 }
 
 .border {
-    border-style: none none solid none;
+    border-style: solid none none none;
 }
 
 /* will be bold */
@@ -12,7 +12,8 @@ textarea {
     border-style:solid;
     border-width: 1px;
     font-weight: bold;
-    /* padding: 10px 1px 1px 10px; */
+    padding: 5px 5px 5px 10px;
+    column-gap: 10px;
 }
 
 /* will be regular font */
@@ -32,13 +33,10 @@ textarea {
 }
 
 #subject {
-    /* text-align: left; */
     justify-self: start;
-    /* overflow: none; */
 }
 
 #email {
-    /* text-align: left; */
     justify-self: start;
     overflow: none;
 }

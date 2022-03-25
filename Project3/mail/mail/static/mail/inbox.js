@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
   document.querySelector('#submit').disabled = true;
 
   // Listen for input in body message
+  // Checks that body is not empty by disabling the submit button
   let bodyMessage = document.querySelector('#compose-body');
   bodyMessage.onkeyup = () => {
     if (bodyMessage.value.length > 0) {
@@ -52,7 +53,7 @@ function load_email(id) {
       display.innerHTML = `
       <span>
           <div><b>From: </b> ${email['sender']}</div>
-          <div><b>To: </b>${email['recipient']}</div>
+          <div><b>To: </b>${email['recipients']}</div>
           <div><b>Time: </b>${email['timestamp']}</div>
           <div><b>Subject: </b>${email['subject']}</div>
       </span>
@@ -66,6 +67,12 @@ function load_email(id) {
           read: true
         })
       })
+
+      // Create div container for action buttons: archive, read, reply
+      actionButtons = document.createElement('div');
+      actionButtons.id = 'actions';
+      // const displayActions = document.getElementById("actions");
+      display.prepend(actionButtons);
 
       // Add reply button here and pre-fill the innerhtml
       replyButton = document.createElement('button');
@@ -85,9 +92,7 @@ function load_email(id) {
         // If it already has Re then don't add another one
         let checkSubject = email.subject;
         if (!checkSubject.includes("Re:", 0)) {
-          let re = `
-        Re: ${email['subject']}
-        `
+          let re = `Re: ${email['subject']}`
           document.querySelector('#compose-subject').value = re;
         } else {
           document.querySelector('#compose-subject').value = checkSubject;
@@ -95,13 +100,11 @@ function load_email(id) {
 
         // Pre-fill the body
         // With a "On Jan 1 2020, 12:00 AM foo@example.com wrote:" followed by the original text of the email.
-        let body = `
-      On ${email['timestamp']}, ${email['sender']} wrote:
-      `
+        let body = `On ${email['timestamp']}, ${email['sender']} wrote:`
         document.querySelector('#compose-body').value = body;
       })
 
-      display.prepend(replyButton);
+      actionButtons.prepend(replyButton);
 
       // Create Mark Unread Button
       // If email read is true, show mark unread button
@@ -109,25 +112,44 @@ function load_email(id) {
 
       markUnread = document.createElement('button');
       markUnread.classList.add('btn', 'btn-sm', 'btn-outline-primary');
-      markUnread.innerHTML = "Mark as Unread";
-      markUnread.addEventListener('click', function () {
-        // Add PUT request to update the email is false
-        fetch('/emails/' + id, {
-          method: 'PUT',
-          body: JSON.stringify({
-            read: false
+
+      let checkRead = email.read;
+      if (!checkRead) {
+        markUnread.innerHTML = "Mark as Read";
+        markUnread.addEventListener('click', function () {
+          // Add PUT request to update the email is false
+          fetch('/emails/' + id, {
+            method: 'PUT',
+            body: JSON.stringify({
+              read: true
+            })
           })
             .then(response => load_mailbox('inbox'))
         })
-      })
+      } else {
+        markUnread.innerHTML = "Mark as Unread";
+        markUnread.addEventListener('click', function () {
+          // Add PUT request to update the email is false
+          fetch('/emails/' + id, {
+            method: 'PUT',
+            body: JSON.stringify({
+              read: false
+            })
+          })
+            .then(response => load_mailbox('inbox'))
+        })
+      }
+      // display.prepend(markUnread);
+      actionButtons.prepend(markUnread);
 
-        display.prepend(markUnread);
+      markArchive = document.createElement('button');
+      markArchive.classList.add('btn', 'btn-sm', 'btn-outline-primary');
 
-        // Create Archive button
-        // Only applies to 'Inbox' and 'Archive' mailboxes. Not 'Sent'. 
-        // After archive/unarchive, go to inbox
-        markArchive = document.createElement('button');
-        markArchive.classList.add('btn', 'btn-sm', 'btn-outline-primary');
+      // Create Archive button
+      // Only applies to 'Inbox' and 'Archive' mailboxes. Not 'Sent'. 
+      // After archive/unarchive, go to inbox
+      let checkArchive = email.archived;
+      if (!checkArchive) {
         markArchive.innerHTML = "Archive";
         markArchive.addEventListener('click', function () {
           // Add PUT request to update the email is archived or not
@@ -136,59 +158,74 @@ function load_email(id) {
             body: JSON.stringify({
               archived: true
             })
-              .then(response => load_mailbox('inbox'))
           })
+            .then(response => load_mailbox('inbox'))
         })
-        display.prepend(markArchive);
+      } else {
+        markArchive.innerHTML = "Unarchive";
+        markArchive.addEventListener('click', function () {
+          // Add PUT request to update the email is archived or not
+          fetch('/emails/' + id, {
+            method: 'PUT',
+            body: JSON.stringify({
+              archived: false
+            })
+          })
+            .then(response => load_mailbox('inbox'))
+        })
+      }
+      // display.prepend(markArchive);
+      actionButtons.prepend(markArchive);
     })
-}
+  }
+
 /*
-When composing new mail, hide the emails view to show the compose view and set all fields to empty
-Checks that email is not empty by disabling the submit button
-If To field and Subject line is empty, it will show a dialog box
-Send POST request once everything is filled out
+When composing new mail, hide the emails view to show the compose view 
+and set all fields to empty
 */
 function compose_email() {
-  // Hide emails view and show compose view
-  document.querySelector('#emails-view').style.display = 'none';
-  document.querySelector('#compose-view').style.display = 'block';
+        // Hide emails view and show compose view
+        document.querySelector('#emails-view').style.display = 'none';
+        document.querySelector('#compose-view').style.display = 'block';
 
-  // Clear out composition fields
-  document.querySelector('#compose-recipients').value = '';
-  document.querySelector('#compose-subject').value = '';
-  document.querySelector('#compose-body').value = '';
-}
+        // Clear out composition fields
+        document.querySelector('#compose-recipients').value = '';
+        document.querySelector('#compose-subject').value = '';
+        document.querySelector('#compose-body').value = '';
+      }
 
 /* 
- If toField and/or Subject line is empty after submit is clicked, 
- show pop up if user is show to send without anything
+ If To field is empty after submit it's clicked, a pop-up will show 
+ and can't continue
+ If the Subject line is empty after submit is clicked, show dialog box 
+ if user is sure to send without anything
  */
 
 function validate_fields() {
 
-  const subjectField = document.querySelector('#compose-subject').value;
-  const toField = document.querySelector('#compose-recipients').value;
+        const subjectField = document.querySelector('#compose-subject').value;
+        const toField = document.querySelector('#compose-recipients').value;
 
-    if (toField.length == 0) {
-      alert('You forgot to put in the recipient\'s email address!');
-      return false;
-    };
-
-    if (subjectField.length == 0) {
-      if (confirm('The Subject line is empty! Are you sure you want to continue?')) {
-        submit_email(); 
-      } else {
+        if (toField.length == 0) {
+          alert('You forgot to put in the recipient\'s email address!');
           return false;
+        };
+
+        if (subjectField.length == 0) {
+          if (confirm('The Subject line is empty! Are you sure you want to continue?')) {
+            submit_email();
+          } else {
+            return false;
+          }
         }
-      }
-    };
+      };
 
-function submit_email() {
+  function submit_email() {
 
-  const submit = document.querySelector('#submit');
-  const bodyMessage = document.querySelector('#compose-body').value;
-  const subjectField = document.querySelector('#compose-subject').value;
-  const toField = document.querySelector('#compose-recipients').value;
+    const submit = document.querySelector('#submit');
+    const bodyMessage = document.querySelector('#compose-body').value;
+    const subjectField = document.querySelector('#compose-subject').value;
+    const toField = document.querySelector('#compose-recipients').value;
 
     // Send a POST request to the URL
     fetch('/emails', {
@@ -200,89 +237,74 @@ function submit_email() {
         read: false,
       })
     })
-        .then(response => response.json())
-        .then(result => {
-          //Print result
-          console.log(result);
+      .then(response => response.json())
+      .then(result => {
 
-          // Load sent mailbox afterwards
-          load_mailbox('sent');
-    })
+        // Load sent mailbox afterwards
+        load_mailbox('sent');
+      })
 
     // Disable submit button afterwards
     submit.disabled = true;
 
     // Stop form from submitting
     return false;
-  // })
-}
+  }
 
 
-/*
-When loading the mailbox, it will list out all the emails as its on line
-If unread, it's bold with white background
-If read, it's not bold with gray background
-*/
+  /*
+  When loading the mailbox, it will list out all the emails as its on line
+  If unread, it's bold with white background
+  If read, it's not bold with gray background
+  */
 
 
-function load_mailbox(mailbox) {
+  function load_mailbox(mailbox) {
 
-  // Show the mailbox and hide other views
-  // Shows emails and hides compose views 
-  document.querySelector('#emails-view').style.display = 'block';
-  document.querySelector('#compose-view').style.display = 'none';
+    // Show the mailbox and hide other views
+    // Shows emails and hides compose views 
+    document.querySelector('#emails-view').style.display = 'block';
+    document.querySelector('#compose-view').style.display = 'none';
 
 
-  // Query to check to see if there are any emails first
-  // Send a GET request to the URL
-  fetch(`/emails/${mailbox}`)
-    .then(response => response.json())
-    .then(emails => {
+    // Query to check to see if there are any emails first
+    // Send a GET request to the URL
+    fetch(`/emails/${mailbox}`)
+      .then(response => response.json())
+      .then(emails => {
+        emails.forEach(email => {
 
-      // Print emails
-      console.log(emails);
+          // Create div element
+          const elemDiv = document.createElement('div');
 
-      emails.forEach(email => {
-
-        // Create div element
-        const elemDiv = document.createElement('div');
-        
-
-        /* <div>${email['sender']} <span class="subject">${email['subject']}</span> <span class="timestamp">${email['timestamp']}</span></div>*/
-
-        // For each email, it gets its own div tag.. for now
-        elemDiv.innerHTML = `
+          elemDiv.innerHTML = `
               <div><div id="email"> ${email['sender']}</div></div>
               <div><div id="subject">${email['subject']}</div></div>
               <div><div id="timestamp">${email['timestamp']}</div></div>   
           `;
 
-        // Change color if email is read or not
-        // if unread then all divs are bold
+          // Change color if email is read or not
+          if (email.read) {
+            elemDiv.classList.add('email-read', 'wrapper-grid-container');
+          } else {
+            elemDiv.classList.add('email-unread', 'wrapper-grid-container');
+          }
 
-        if (email.read) {
-          elemDiv.classList.add('email-read');
-          elemDiv.classList.add('wrapper-grid-container');
-        } else {
-          elemDiv.classList.add('email-unread');
-          elemDiv.classList.add('wrapper-grid-container');
-        }
+          // Add listener to open email via ID
+          elemDiv.addEventListener('click', () => load_email(email.id));
 
-        // Add listener to open email via ID
-        elemDiv.addEventListener('click', () => load_email(email.id));
+          // Append to DOM
+          document.querySelector('#emails-view').appendChild(elemDiv);
 
-        // Append to DOM
-        document.querySelector('#emails-view').appendChild(elemDiv);
-
+        })
       })
-    })
 
-  // Show the mailbox name
-  // Displays the name of the selected mailbox
-  // Capitalizes the first letter
-  // slice - used to extract a portion of an array into a new array object
-  // slice begins at 1
-  // I + nbox = Inbox
-  document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
+    // Show the mailbox name
+    // Displays the name of the selected mailbox
+    // Capitalizes the first letter
+    // slice - used to extract a portion of an array into a new array object
+    // slice begins at 1
+    // I + nbox = Inbox
+    document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
 
-};
+  };
