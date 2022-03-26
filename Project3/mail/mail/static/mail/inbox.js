@@ -278,11 +278,20 @@ function load_mailbox(mailbox) {
         // Create div element
         const elemDiv = document.createElement('div');
 
-        elemDiv.innerHTML = `
-              <div><div id="email"> ${email['sender']}</div></div>
-              <div><div id="subject">${email['subject']}</div></div>
-              <div><div id="timestamp">${email['timestamp']}</div></div>   
-          `;
+        if (!mailbox == sent) 
+        {
+          elemDiv.innerHTML = `
+          <div><div id="email"> ${email['sender']}</div></div>
+          <div><div id="subject">${email['subject']}</div></div>
+          <div><div id="timestamp">${email['timestamp']}</div></div>   
+      `; 
+        } else {
+          elemDiv.innerHTML = `
+          <div><div id="email"> ${email['recipients']}</div></div>
+          <div><div id="subject">${email['subject']}</div></div>
+          <div><div id="timestamp">${email['timestamp']}</div></div>   
+      `; 
+        }
 
         // Change color if email is read or not
         if (email.read) {
