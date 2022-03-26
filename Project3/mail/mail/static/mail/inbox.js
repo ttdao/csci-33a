@@ -100,7 +100,8 @@ function load_email(id) {
 
         // Pre-fill the body
         // With a "On Jan 1 2020, 12:00 AM foo@example.com wrote:" followed by the original text of the email.
-        let body = `On ${email['timestamp']}, ${email['sender']} wrote:`
+        let body = `On ${email['timestamp']}, ${email['sender']} wrote: 
+        ${email['body']}`
         document.querySelector('#compose-body').value = body;
       })
 
@@ -177,22 +178,22 @@ function load_email(id) {
       // display.prepend(markArchive);
       actionButtons.prepend(markArchive);
     })
-  }
+}
 
 /*
 When composing new mail, hide the emails view to show the compose view 
 and set all fields to empty
 */
 function compose_email() {
-        // Hide emails view and show compose view
-        document.querySelector('#emails-view').style.display = 'none';
-        document.querySelector('#compose-view').style.display = 'block';
+  // Hide emails view and show compose view
+  document.querySelector('#emails-view').style.display = 'none';
+  document.querySelector('#compose-view').style.display = 'block';
 
-        // Clear out composition fields
-        document.querySelector('#compose-recipients').value = '';
-        document.querySelector('#compose-subject').value = '';
-        document.querySelector('#compose-body').value = '';
-      }
+  // Clear out composition fields
+  document.querySelector('#compose-recipients').value = '';
+  document.querySelector('#compose-subject').value = '';
+  document.querySelector('#compose-body').value = '';
+}
 
 /* 
  If To field is empty after submit it's clicked, a pop-up will show 
@@ -203,108 +204,108 @@ function compose_email() {
 
 function validate_fields() {
 
-        const subjectField = document.querySelector('#compose-subject').value;
-        const toField = document.querySelector('#compose-recipients').value;
+  const subjectField = document.querySelector('#compose-subject').value;
+  const toField = document.querySelector('#compose-recipients').value;
 
-        if (toField.length == 0) {
-          alert('You forgot to put in the recipient\'s email address!');
-          return false;
-        };
-
-        if (subjectField.length == 0) {
-          if (confirm('The Subject line is empty! Are you sure you want to continue?')) {
-            submit_email();
-          } else {
-            return false;
-          }
-        }
-      };
-
-  function submit_email() {
-
-    const submit = document.querySelector('#submit');
-    const bodyMessage = document.querySelector('#compose-body').value;
-    const subjectField = document.querySelector('#compose-subject').value;
-    const toField = document.querySelector('#compose-recipients').value;
-
-    // Send a POST request to the URL
-    fetch('/emails', {
-      method: 'POST',
-      body: JSON.stringify({
-        recipients: toField,
-        subject: subjectField,
-        body: bodyMessage,
-        read: false,
-      })
-    })
-      .then(response => response.json())
-      .then(result => {
-
-        // Load sent mailbox afterwards
-        load_mailbox('sent');
-      })
-
-    // Disable submit button afterwards
-    submit.disabled = true;
-
-    // Stop form from submitting
+  if (toField.length == 0) {
+    alert('You forgot to put in the recipient\'s email address!');
     return false;
+  };
+
+  if (subjectField.length == 0) {
+    if (confirm('The Subject line is empty! Are you sure you want to continue?')) {
+      submit_email();
+    } else {
+      return false;
+    }
   }
+};
+
+function submit_email() {
+
+  const submit = document.querySelector('#submit');
+  const bodyMessage = document.querySelector('#compose-body').value;
+  const subjectField = document.querySelector('#compose-subject').value;
+  const toField = document.querySelector('#compose-recipients').value;
+
+  // Send a POST request to the URL
+  fetch('/emails', {
+    method: 'POST',
+    body: JSON.stringify({
+      recipients: toField,
+      subject: subjectField,
+      body: bodyMessage,
+      read: false,
+    })
+  })
+    .then(response => response.json())
+    .then(result => {
+
+      // Load sent mailbox afterwards
+      load_mailbox('sent');
+    })
+
+  // Disable submit button afterwards
+  submit.disabled = true;
+
+  // Stop form from submitting
+  return false;
+}
 
 
-  /*
-  When loading the mailbox, it will list out all the emails as its on line
-  If unread, it's bold with white background
-  If read, it's not bold with gray background
-  */
+/*
+When loading the mailbox, it will list out all the emails as its on line
+If unread, it's bold with white background
+If read, it's not bold with gray background
+*/
 
 
-  function load_mailbox(mailbox) {
+function load_mailbox(mailbox) {
 
-    // Show the mailbox and hide other views
-    // Shows emails and hides compose views 
-    document.querySelector('#emails-view').style.display = 'block';
-    document.querySelector('#compose-view').style.display = 'none';
+  // Show the mailbox and hide other views
+  // Shows emails and hides compose views 
+  document.querySelector('#emails-view').style.display = 'block';
+  document.querySelector('#compose-view').style.display = 'none';
 
 
-    // Query to check to see if there are any emails first
-    // Send a GET request to the URL
-    fetch(`/emails/${mailbox}`)
-      .then(response => response.json())
-      .then(emails => {
-        emails.forEach(email => {
+  // Query to check to see if there are any emails first
+  // Send a GET request to the URL
+  fetch(`/emails/${mailbox}`)
+    .then(response => response.json())
+    .then(emails => {
+      emails.forEach(email => {
 
-          // Create div element
-          const elemDiv = document.createElement('div');
+        // Create div element
+        const elemDiv = document.createElement('div');
 
-          elemDiv.innerHTML = `
+        elemDiv.innerHTML = `
               <div><div id="email"> ${email['sender']}</div></div>
               <div><div id="subject">${email['subject']}</div></div>
               <div><div id="timestamp">${email['timestamp']}</div></div>   
           `;
 
-          // Change color if email is read or not
-          if (email.read) {
-            elemDiv.classList.add('email-read', 'wrapper-grid-container');
-          } else {
-            elemDiv.classList.add('email-unread', 'wrapper-grid-container');
-          }
+        // Change color if email is read or not
+        if (email.read) {
+          elemDiv.classList.add('email-read', 'wrapper-grid-container');
+        } else {
+          elemDiv.classList.add('email-unread', 'wrapper-grid-container');
+        }
 
-          // Add listener to open email via ID
-          elemDiv.addEventListener('click', () => load_email(email.id));
+        // Add listener to open email via ID
+        elemDiv.addEventListener('click', () => load_email(email.id));
 
-          // Append to DOM
-          document.querySelector('#emails-view').appendChild(elemDiv);
+        // Append to DOM
+        document.querySelector('#emails-view').appendChild(elemDiv);
 
-        })
       })
+    })
 
-    // Show the mailbox name
-    // Displays the name of the selected mailbox
-    // Capitalizes the first letter
-    // slice - used to extract a portion of an array into a new array object
-    // slice begins at 1
-    // I + nbox = Inbox
-    document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
+  // Show the mailbox name
+  // Displays the name of the selected mailbox
+  // Capitalizes the first letter
+  // slice - used to extract a portion of an array into a new array object
+  // slice begins at 1
+  // I + nbox = Inbox
+  document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
 
-  };
+};
