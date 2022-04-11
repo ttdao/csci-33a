@@ -1,5 +1,12 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-    TODO
+    {%  if user.is_authenti %}
+    <h2>Recent Posts</h2>
+    <ul>
+    {% for post in allposts %}
+        <li><a href="{% url 'network:profile' post.username %}"> {{ post.username }}:</a></li>
+    <li>{{ post.user_post }}</li>
+    {% endfor %}
+    </ul>
 {% endblock %}

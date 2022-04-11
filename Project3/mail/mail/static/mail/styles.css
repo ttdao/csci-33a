@@ -1,28 +1,26 @@
 textarea {
     min-height: 400px;
+    overflow-y: scroll;
 }
 
 .border {
-    border-style: none none solid none;
+    border-style: solid none none none;
 }
 
-/* will be bold */
-.email-unread {
-    border-color:antiquewhite;
+.email-unread, .email-read {
     border-style:solid;
     border-width: 1px;
-    font-weight: bold;
-    /* padding: 10px 1px 1px 10px; */
-}
-
-/* will be regular font */
-.email-read{
-    border-color:black;
-    border-style:solid;
-    border-width: 1px;
-    background-color: gray;
     padding: 5px 5px 5px 10px;
     column-gap: 10px;
+}
+
+.email-unread {
+    font-weight: bold;
+    background-color: grey;
+}
+
+.email-read{
+    border-color:black;
 }
 
 #timestamp {
@@ -32,13 +30,10 @@ textarea {
 }
 
 #subject {
-    /* text-align: left; */
     justify-self: start;
-    /* overflow: none; */
 }
 
 #email {
-    /* text-align: left; */
     justify-self: start;
     overflow: none;
 }
@@ -54,4 +49,12 @@ textarea {
     background-color: lightgray;
 }
 
-
+/* reply, archive, read buttons */
+#actions {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    justify-content: end;
+    align-content: space-around;
+    text-align: right;
+    column-gap: 5px;
+}
