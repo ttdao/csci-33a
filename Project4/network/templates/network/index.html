@@ -1,12 +1,54 @@
+<!-- Homepage -->
+
 {% extends "network/layout.html" %}
 
 {% block body %}
-    {%  if user.is_authenti %}
+    {%  if user.is_authenticated %}
+        <h2>New Post</h2>
+        <form action="network:create_post" id="post-form" method="post">
+        {% csrf_token %}
+        <textarea class="post" id="post-message">Post: {{ post_form.post }}</textarea>
+        <input class="btn btn-primary" type="submit" value='{% trans "Post" %}'>
+        </form>
+    {% endif %}
     <h2>Recent Posts</h2>
     <ul>
-    {% for post in allposts %}
-        <li><a href="{% url 'network:profile' post.username %}"> {{ post.username }}:</a></li>
+{#    {% for post in allposts %}#}
+{#        <li><a href="{% url 'network:profile' post.username %}"> {{ post.username }}:</a></li>#}
+{#    <li>{{ post.user_post }}</li>#}
+{#    {% endfor %}#}
+    {% for post in page_obj %}
+         <li><a href="{% url 'network:profile' post.username %}"> {{ post.username }}:</a></li>#}
     <li>{{ post.user_post }}</li>
+        {%  if user.is_authenticated %}
+            <li>Edit Post Here (if it is yours lol)</li>
+        {% endif %}
+        <li>{{ post.num_likes }}</li>
+        <li>{{ post.num_followers }}</li>
+        <li>Comment button goes here</li>
     {% endfor %}
     </ul>
+{% endblock %}
+
+{# source: taken from the django site #}
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+        <a href="?page=1">back; first</a>
+        <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+    <span class="current">
+        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+    </span>
+
+    {% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}">next</a>
+    <a href="?page={{ page_obj.paginator.num_pages }}">last</a>
+    {% endif %}
+    </span>
+</div>
+
+{% block script %}
+    <script src="{% static 'network/posts.js' %}"></script>
 {% endblock %}

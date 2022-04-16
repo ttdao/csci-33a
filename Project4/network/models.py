@@ -8,25 +8,26 @@ class User(AbstractUser):
 
 
 class Post(models.Model):
-    username = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
-    user_post = models.CharField(max_length=128)  # but TextArea
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+    user_post = models.CharField(max_length=128)
     # post_pic = models.CharField(max_length=128) #Link for img?
     posting_date = models.DateField(auto_now_add=True)
     posting_time = models.DateTimeField(default=timezone.now())
     num_likes = models.CharField(max_length=5)
+    num_followers = models.CharField(max_length=5)
 
     def __str__(self):
-        return f"ID: {self.id} - {self.posting_date} {self.posting_time} - {self.username} posted " \
+        return f"ID: {self.id} - {self.posting_date} {self.posting_time} - {self.user} posted " \
                f"{self.user_post}"
 
 
 class Profile(models.Model):
-    username = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
-    num_followers = models.CharField(max_length=5)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+    username = models.CharField(max_length=64)
     prof_posts = models.ForeignKey(Post, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"ID: {self.id} has {self.num_followers} followers "
+        return f"ID: {self.id} {self.user} "
 
 
 class Comment(models.Model):
@@ -36,6 +37,22 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"ID: {self.id} {self.username} {self.post_id} - {self.post_comment}"
+
+
+class Like(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+    post_id = models.ForeignKey(Post, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"ID: {self.id} {self.username} liked {self.post_id}"
+
+
+class Follow(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+    followed_user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+
+    def __str__(self):
+        return f"ID: {self.id} {self.username} followed {self.followed_user}"
 
 
 # Remember to first run python manage.py makemigrations

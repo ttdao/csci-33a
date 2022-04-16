@@ -2,14 +2,15 @@ import random
 
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
 from django import forms
 from django.contrib.auth.decorators import login_required
 import datetime
+from django.core.paginator import Paginator
 
-from .models import User, Post, Profile, Comment
+from .models import User, Post, Profile, Comment, Follow, Like
 
 
 class CreatePost(forms.Form):
@@ -24,29 +25,40 @@ class EditPost(forms.Form):
 
 # Show all posts on the front page and order from new to old
 def index(request):
+
+    all_posts: Post.objects.order_by("-date").all()
+
+    paginator = Paginator(all_posts,5)
+    page_number = request.GET.get('page')
+    page_object = paginator.get_page(page_number)
+
+
     return render(request, "network/index.html", {
-                  "allposts": Post.objects.all()
+            "page_obj": page_object,
+            "post_form": CreatePost(),
+
     })
 
-# Get user profile by username and their posts ordered by recent posts
+# Get user profile by (str)username and their posts ordered by recent posts
 def get_profile(request, username):
     #Get User profile if it exists
     try:
-        get_profile(Profile.objects.get(username=username))
+        get_profile = Profile.objects.get(username=username)
+        user = get_profile.user_id
     except Profile.DoesNotExist:
         return render(request, "network/error.html",{
             "message": "Profile does not exist! Are you this is right?",
         })
 
     # Get all posts
-    get_posts = Post.objects.filter(username=username)
+    get_posts = Post.objects.filter(user=user)
 
     return render(request, "network/profile.html", {
         "username": username,
-
+        "prof_posts": get_profile,
     })
 
-# Create new post
+# Create new post - DONE
 @login_required (login_url="network:login")
 def create_post(request):
     if request.method == "POST:":
@@ -55,36 +67,39 @@ def create_post(request):
         #if form is valid
         if new_post.is_valid():
             #Find User based on the ID
-            user_id = User.objects.get(pk=request.user.id)
-
-            #Get Username from the ID HERE
-            user_profile = Profile.objects.get(pk=user_id)
-            username = user_profile.username
+            user = User.objects.get(pk=request.user.id)
 
             # Get clean post
             post = new_post.cleaned_data["post"]
 
             # Save Post
             save_post = Post.objects.create(
-                #seller=user?
-                username=username,
-                post=post,
-                like="false",
+                user=user,
+                user_post=post,
+                posting_date=datetime.datetime.today(),
+                posting_time=datetime.datetime.now(),
+                num_likes=0,
+                num_followers=0,
             )
             save_post.save()
+            # Get username from profile
+            # get_post = Profile.objects.get(pk=save_post.username)
 
-            get_post = Profile.objects.get(pk=save_post.username)
+            #Go back to Homepage
 
-            #Go back to Profile
-
-            return HttpResponseRedirect(reverse('network:profile', args=(get_post,)))
+            return HttpResponseRedirect(reverse('network:index', args=()))
 
         #if invalid, stay on the page
         else:
-            return render(request, "network/profile.html")
+            return render(request, "network/index.html",{
+                "post_form": new_post,
+            })
 
+        # if method is GET, go to create post
+    else:
+        return render(request, "network/index.html", {
+            "post_form": CreatePost(),
         })
-
 
 
 # Make sure someone is logged in before editing one of their own posts
@@ -108,17 +123,58 @@ def edit_post(request, post_id):
             # "img": retrieved_img
         })
 
-        return render(request, "network/edit.html", {
-            "post":
-
+        return render(request, "network/index.html", {
+            "edit_form": edit_form,
+            "post_id": post_id,
         })
 
     #When it is POST
+    else:
+        edit_form = EditPost(request.POST)
+
+        if edit_form.is_valid():
+            edited = edit_form.cleaned_data["post"]
+
+            # Update Object
 
 
 
-# Get followers of a user
-def get_followers(request):
+
+# Get followed posts - DONE
+@login_required (login_url="network:login")
+def follow_action(request, user_id):
+    # Query to see it is following
+    try:
+        follow_exist = Follow.objects.get(user=request.user, followed_user=user_id)
+
+    # If it does not exist
+    except Follow.DoesNotExist:
+
+        # See if User exists
+        try:
+            find_user = User.objects.get(pk=user_id)
+
+        except User.DoesNotExist:
+            return render(request, "network/error.html", {
+                "message": "404 User Not Found",
+            })
+        else:
+            new_follow = Follow(
+                user=request.user,
+                followed_user=find_user
+            )
+            new_follow.save()
+    # If it does exist, unfollow
+    else:
+        follow_exist.delete()
+
+    username = Profile.objects.get(user=request.user).username
+
+    #Check if follow is true
+    return HttpResponseRedirect(reverse("network:get_profile", args=[username,]))
+
+
+
 
 # Create Comment on Post
 def comment_post(request):
