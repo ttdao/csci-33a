@@ -1,0 +1,25 @@
+{% extends "skilltracker/layout.html" %}
+{%  load static %}
+{% block title %}
+    Edit Post
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+    <h1>Edit Post</h1>
+    <form action="{% url 'skilltracker:edit' post.id %}" method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            {{ edit.title }}
+        </div>
+        <div class="mb-3">
+            {{ edit.content }}
+        </div>
+
+        <div class="mb-3">
+            <input class="form-control" type="text" placeholder="Tag" aria-label="Tag">
+        </div>
+        <input class="btn btn-primary" type="submit" value="Submit">
+    </form>
+    </div>
+{% endblock %}

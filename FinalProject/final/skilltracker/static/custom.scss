@@ -1,0 +1,34 @@
+// Custom.scss
+@use 'base';
+
+$font-stack: Helventica Neue, Cambria, "Times New Roman", Times, serif;
+
+body {
+  font: 100% $font-stack;
+  scroll-behavior: smooth;
+}
+
+.divider {
+  height: 3rem;
+  background-color: rgba(0,0,0,.1);
+  border: solid rgba(0,0,0,.15);
+}
+// New margins for title
+$mb-6: (
+  margin-bottom: ($spacer * 4) !important
+);
+
+$mt-6: (
+  margin-top: ($spacer * 4) !important
+);
+
+// Merge to spacers
+$spacers: map-merge($spacers, $mb-6);
+$spacers: map-merge($spacers, $mt-6);
+
+//@debug map.merge($mb-6, $mb-6)
+
+.title1 {
+  margin-top: 1rem * 4;
+}
+@import "./bootstrap/bootstrap.css";

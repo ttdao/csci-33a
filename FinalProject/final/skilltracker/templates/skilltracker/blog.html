@@ -1,0 +1,12 @@
+{% extends "skilltracker/layout.html" %}
+
+{% block body %}
+    <div class="container">
+<h2>Blog</h2>
+    <ul>
+    {%  for post in blogposts %}
+        <li>{{ post.date }} - <a href="{%  url 'skilltracker:post' post.id %}" > Post {{ post.id }}: {{ post.title }}</a></li>
+    {%  endfor %}
+    </ul>
+    </div>
+{% endblock %}

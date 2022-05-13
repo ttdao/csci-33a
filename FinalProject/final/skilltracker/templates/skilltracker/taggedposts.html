@@ -1,0 +1,20 @@
+{% extends "skilltracker/layout.html" %}
+
+{% block body %}
+    <div class="container">
+        <h2>Tagged Posts</h2>
+        <ul>
+            <div class="row ">
+                {% for tagged in taggedposts %}
+                    <div class="col-md-3">
+                        <div class="h-100 p-5 bg-light border rounded-3">
+                            <h2> {{ tagged.content | truncatewords:5 }}</h2>
+                            <p> {{ tagged.content | truncatewords:15 }}</p>
+                            <a href="{% url 'skilltracker:post' tagged.id %}"><button class="btn btn-outline-secondary" type="button">Read More</button>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </ul>
+    </div>
+{% endblock %}

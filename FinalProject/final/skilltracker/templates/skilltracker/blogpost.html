@@ -1,0 +1,43 @@
+{% extends "skilltracker/layout.html" %}
+{% load static %}
+{% block title %}
+    {{ post.title }}
+{% endblock %}
+{% block body %}
+    <div class="container">
+        <h2>{{ post.title }}</h2>
+        <h4>{{ post.date }}</h4>
+        <p>{{ post.content }}</p>
+    <h6>Tags: </h6>
+    {% for tag in post.tag.all %}
+        <span class="badge rounded-pill bg-info text-dark">{{ tag }}</span>
+    {% endfor %}
+
+        <a href="{% url 'skilltracker:blog' %}">Back to Blog</a>
+        {% if user.is_authenticated %}
+            <a href="{% url 'skilltracker:edit' post.id %}">Edit Post</a>
+            <input type="hidden" id="blogpost" value="{{ post.id }}">
+            <input type="hidden" id="user" value="{{ request.user.id }}">
+
+            <button type="button" class="btn btn-primary" id="like">
+                <i class="bi bi-hand-thumbs-up"></i>
+            </button>
+        {% endif %}
+        <h2 class="pb-2 border-bottom">Comments</h2>
+        <div class="form-group">
+            {% if user.is_authenticated %}
+                <form action="{% url 'skilltracker:comment' post.id %}" method="post">
+                    {% csrf_token %}
+                    {{ form }}
+                    <br>
+                    <input class="btn btn-secondary" type="submit" value="Leave a Comment">
+                </form>
+            {% endif %}
+        </div>
+    <br>
+<h5>{{ num }} Comments</h5>
+        {% for comment in comments %}
+            <li> {{ comment.user }} - {{ comment.date }}: {{ comment.comment }}</li>
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -1,5 +1,109 @@
 {% extends "skilltracker/layout.html" %}
 
 {% block body %}
+    <div class="container-fluid bg-primary text-white" id="intro">
+        <div class="row p-3 ">
+            <div class="d-flex justify-content-center">
+                <p class="fs-1 mt-5" id="title1">Welcome to my final project </p>
+            </div>
+            <div class="row p-1 mb-5">
+                <div class="d-flex justify-content-center">
+                    <p class="fs-5" id="title2">for CSCI E-33a of Spring 2022!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container px-4 py-5" id="icon-grid">
+        <h2 class="pb-2 border-bottom">What's here</h2>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 py-5">
+            <div class="col d-flex align-items-start">
+                <i class="bi bi-pen text-muted me-3 fs-3 mb-3"></i>
+                <div>
+                    <h4 class="fw-bold mb-0">Posts, Comments, and Likes!</h4>
+                    <p>Includes tags that represent different skills in the CS world.</p>
+                </div>
+            </div>
+            <div class="col d-flex align-items-start">
+                <i class="bi bi-calendar-check text-muted me-3 fs-3 mb-3"></i>
+                <div>
+                    <h4 class="fw-bold mb-0">Calendar</h4>
+                    <p>Go ahead and check out if there is a post every day. Accountability is key!</p>
+                </div>
+            </div>
+            <div class="col d-flex align-items-start">
+                <i class="bi bi-tags text-muted me-3 fs-3 mb-3"></i>
+                <div>
+                    <h4 class="fw-bold mb-0">Tagging</h4>
+                    <p>Prepare to see some Javascript animations!</p>
+                </div>
+            </div>
+            <div class="col d-flex align-items-start">
+                <i class="bi bi-bootstrap text-muted me-3 fs-3 mb-3"></i>
+                <div>
+                    <h4 class="fw-bold mb-0">Powered By Bootstrap</h4>
+                    <p>..and SASS! And many things we have to set up the non-Node.js way.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid py-5 bg-light border rounded-3 overflow-hidden">
+        <h1 class="display-5 fw-bold">Click on a tag!</h1>
+{#        <div class="animate-buttons">#}
+            <div class="my-3">
+                {#        <div class="row row-cols-1g-4 py-5 justify-content-evenly">#}
+                {#            <div class="col d-flex ">#}
+                <a href="{% url 'skilltracker:tagged' tag_name='learning' %}">
+                    <button type="button" class="btn btn-primary">Learning</button>
+                </a>
+                <a href="{% url 'skilltracker:tagged' tag_name='javascript' %}">
+                    <button type="button" class="btn btn-primary">Javascript</button>
+                </a>
+                <a href="{% url 'skilltracker:tagged' tag_name='web dev' %}">
+                    <button type="button" class="btn btn-primary">Web Dev</button>
+                </a>
+                <a href="{% url 'skilltracker:tagged' tag_name='python' %}">
+                    <button type="button" class="btn btn-primary">Python</button>
+                </a>
+                <a href="{% url 'skilltracker:tagged' tag_name='game design' %}">
+                    <button type="button" class="btn btn-primary">Game Design</button>
+                </a>
+                <a href="{% url 'skilltracker:tagged' tag_name='books' %}">
+                    <button type="button" class="btn btn-primary">Books</button>
+                </a>
+                <a href="{% url 'skilltracker:tagged' tag_name='just me'%}">
+                    <button type="button" class="btn btn-primary">Just me</button>
+                </a>
+{#            </div>#}
+        </div>
+    </div>
+{#    <div class="divider"></div>#}
+    <div class="container-fluid">
+        <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+            <div class="col-md-4 d-flex align-items-center">
+                <span class="text-muted">© 2022 Tien Dao</span>
+            </div>
+{#            <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">#}
+{#                <li class="ms-3"><a class="text-muted" href="#">#}
+                    {#                    <svg class="bi" width="24" height="24">#}
+                    {#                        <use xlink:href="#twitter"></use>#}
+                    {#                    </svg>#}
+{#                </a></li>#}
+{#                <li class="ms-3"><a class="text-muted" href="#">#}
+                    {#                    <svg class="bi" width="24" height="24">#}
+                    {#                        <use xlink:href="#instagram"></use>#}
+                    {#                    </svg>#}
+{#                </a></li>#}
+{#                <li class="ms-3"><a class="text-muted" href="#">#}
+                    {#                    <svg class="bi" width="24" height="24">#}
+                    {#                        <use xlink:href="#facebook"></use>#}
+                    {#                    </svg>#}
+{#                </a></li>#}
+{#            </ul>#}
+        </footer>
+
+    </div>
+
 
 {% endblock %}

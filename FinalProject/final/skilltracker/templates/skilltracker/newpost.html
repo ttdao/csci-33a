@@ -1,0 +1,29 @@
+{% extends "skilltracker/layout.html" %}
+{%  load static %}
+{% block title %}
+    Create New Post
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+    <h1>Create New Post</h1>
+    <form action="{% url 'skilltracker:create' %}" method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+{#            <input class="form-control" type="text" placeholder="Title" aria-label="Title">#}
+            {{ form.title }}
+        </div>
+        <div class="mb-3">
+{#            <textarea class="form-control" placeholder="Start Typing!" aria-label="Start Typing!" rows="7"></textarea>#}
+            {{ form.content }}
+        </div>
+
+        <div class="mb-3">
+{#            <input class="form-control" type="text" placeholder="Tag" aria-label="Tag">#}
+            {{ form.tag }}
+        </div>
+        <input class="btn btn-primary" type="submit" value="Submit">
+
+    </form>
+    </div>
+{% endblock %}
