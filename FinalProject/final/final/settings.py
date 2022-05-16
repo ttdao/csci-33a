@@ -30,8 +30,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     '0.0.0.0',
-    'boiling-tundra-04008.herokuapp.com',
-    '127.0.0.1',
+    'boiling-tundra-04008.herokuapp.com/skilltracker',
+    'localhost',
 ]
 
 
