@@ -161,7 +161,7 @@ COMPRESS_CACHEABLE_PRECOMPILERS = (("text/x-scss", "django_libsass.SassCompiler"
 
 COMPRESS_ENABLED = True
 
-if DEBUG == True:
+if DEBUG:
     COMPRESS_OFFLINE = False
 else:
     COMPRESS_OFFLINE = True
