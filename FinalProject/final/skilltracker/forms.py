@@ -21,6 +21,9 @@ class CreatePost(forms.ModelForm):
                                          queryset=Tag.objects.all(),
                                          )
 
+    class Meta:
+        model = Post
+
 
 class EditPost(forms.ModelForm):
     title = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
@@ -29,8 +32,14 @@ class EditPost(forms.ModelForm):
                                          queryset=Tag.objects.all(),
                                          )
 
+    class Meta:
+        model = Post
+
 
 class CreateComment(forms.ModelForm):
     comment = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control',
                                                            'placeholder': 'Leave a comment',
                                                            'aria-label': 'Leave a comment'}), )
+
+    class Meta:
+        model = Comment

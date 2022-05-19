@@ -12,12 +12,12 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from pathlib import Path
 import os
-import sass
+
+# import sass_processor
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
@@ -30,15 +30,15 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     '0.0.0.0',
-    'boiling-tundra-04008.herokuapp.com/skilltracker',
+    'boiling-tundra-04008.herokuapp.com',
     'localhost',
 ]
-
 
 # Application definition
 
 INSTALLED_APPS = [
     'skilltracker',
+    'sass_processor',
     'compressor',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -50,13 +50,14 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    # 'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'final.urls'
@@ -78,7 +79,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'final.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
@@ -110,7 +110,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
@@ -124,20 +123,19 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 
-
-#path to where static files are copied for deployment (Heroku)
+# path to where static files are copied for deployment (Heroku)
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = (
+STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
-)
+]
+
 STATICFILES_FINDERS = [
     'compressor.finders.CompressorFinder',
     'django.contrib.staticfiles.finders.FileSystemFinder',
@@ -146,8 +144,12 @@ STATICFILES_FINDERS = [
 
 ]
 
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+# SASS_PROCESSOR_INCLUDE_DIRS = [
+#     os.path.join(PROJECT_PATH, 'extra-styles/scss'),
+#     os.path.join(PROJECT_PATH, 'node_modules'),
+# ]
 
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # STATIC_FILES_FINDERS = [
 #     'compressor.finders.CompressorFinder',
@@ -155,8 +157,8 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 #     'sass_processor.finders.CssFinder',
 # ]
 
-# SASS_PROCESSOR_ROOT = os.path.join(PROJECT_ROOT, 'static')
-COMPRESS_PRECOMPILERS = [('text/x-scss', 'django_libsass.SassCompiler'),]
+SASS_PROCESSOR_ROOT = os.path.join(BASE_DIR, 'static')
+COMPRESS_PRECOMPILERS = [('text/x-scss', 'django_libsass.SassCompiler'), ]
 COMPRESS_CACHEABLE_PRECOMPILERS = (("text/x-scss", "django_libsass.SassCompiler"),)
 
 COMPRESS_ENABLED = True
