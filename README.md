@@ -7,7 +7,7 @@ As part of my programming certificate, I took this class as an elective. This is
 My code progressively becomes a little more elegant in each project. I started in Java through this certificate program and this is my first time doing Django, especially Python. 
 
 
-## Projects:
+## Projects
 
 *  Project 0: Search
 *  Project 1: Wiki
