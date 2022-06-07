@@ -11,35 +11,39 @@ from .models import Comment, Post, Tag
 
 
 class CreatePost(forms.ModelForm):
-    title = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control',
-                                                          'placeholder': 'Title',
-                                                          'aria-label': 'Title'}))
-    content = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control',
-                                                           'placeholder': 'Start Typing!',
-                                                           'aria-label': 'Start Typing!'}))
-    tag = forms.ModelMultipleChoiceField(widget=forms.CheckboxSelectMultiple,
-                                         queryset=Tag.objects.all(),
-                                         )
-
     class Meta:
         model = Post
+        fields = ('title', 'content')
+        tag = forms.ModelMultipleChoiceField(widget=forms.CheckboxSelectMultiple,
+                                             queryset=Tag.objects.all(), )
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control',
+                                            'placeholder': 'Title',
+                                            'aria-label': 'Title'}),
+            'content': forms.Textarea(attrs={'class': 'form-control',
+                                             'placeholder': 'Start Typing!',
+                                             'aria-label': 'Start Typing!'}),
+        }
 
 
 class EditPost(forms.ModelForm):
-    title = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
-    content = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
-    tag = forms.ModelMultipleChoiceField(widget=forms.CheckboxSelectMultiple,
-                                         queryset=Tag.objects.all(),
-                                         )
-
     class Meta:
         model = Post
+        fields = ('title', 'content')
+        tag = forms.ModelMultipleChoiceField(widget=forms.CheckboxSelectMultiple,
+                                             queryset=Tag.objects.all(), )
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'content': forms.TextInput(attrs={'class': 'form-control'}),
+        }
 
 
 class CreateComment(forms.ModelForm):
-    comment = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control',
-                                                           'placeholder': 'Leave a comment',
-                                                           'aria-label': 'Leave a comment'}), )
-
     class Meta:
         model = Comment
+        fields = ('comment',)
+        widgets = {
+            'comment': forms.Textarea(attrs={'class': 'form-control',
+                                             'placeholder': 'Leave a comment',
+                                             'aria-label': 'Leave a comment'}),
+        }
