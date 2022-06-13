@@ -2,11 +2,34 @@
 
 {% block body %}
     <div class="container">
-<h2>Blog</h2>
-    <ul>
-    {%  for post in blogposts %}
-        <li>{{ post.date }} - <a href="{%  url 'skilltracker:post' post.id %}" > Post {{ post.id }}: {{ post.title }}</a></li>
-    {%  endfor %}
-    </ul>
+        <h2>Blog</h2>
+        {#        <ul>#}
+        {% for post in blogposts %}
+            {#        <li>{{ post.date }} - <a href="{%  url 'skilltracker:post' post.id %}" > Post {{ post.id }}: {{ post.title }}</a></li>#}
+            <div class="post">
+                <span class="post-date">{{ post.date }}</span>
+                <div class="post-content">
+                    <a href="{% url 'skilltracker:post' post.id %}"><h3>{{ post.title }}</h3></a>
+                    <ul class="post-meta list-inline">
+                        <li class=list-inline-item">
+                            <a href="#">{{ post.user }}
+                        </li>
+                        <li class="list-inline-item">
+                            <a href="#">{{ post.date }}</a>
+                        </li>
+                        <li class="list-inline-item">
+                            {% for tag in post.tag.all %}
+                                <a href="#"><span class="badge rounded-pill bg-info text-dark">{{ tag }}</span></a>
+                            {% endfor %}
+                        </li>
+                    </ul>
+                    <p>{{ post.content }}</p>
+                    <a href="#" class="btn btn-outline-secondary btn-sm">Read More</a>
+                    <br>
+                </div>
+                <br>
+            </div>
+        {% endfor %}
+        {#        </ul>#}
     </div>
 {% endblock %}
