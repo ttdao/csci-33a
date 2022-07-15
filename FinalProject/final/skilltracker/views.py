@@ -27,6 +27,11 @@ def blog(request):
     })
 
 
+def about(request):
+    return render(request, "skilltracker/aboutme.html", {
+    })
+
+
 # DONE
 @login_required(login_url="skilltracker:login")
 def create(request):

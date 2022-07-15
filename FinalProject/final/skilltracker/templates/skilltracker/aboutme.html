@@ -1,10 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "skilltracker/layout.html" %}
+{% load static %}
+{% block title %}
+    {{ post.title }}
+{% endblock %}
+{% block body %}
 Name
 Blurb
 
@@ -16,5 +15,4 @@ Goals
 Add cute GIFS I guess
 
 
-</body>
-</html>
+{% endblock %}

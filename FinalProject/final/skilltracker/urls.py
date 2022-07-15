@@ -22,4 +22,6 @@ urlpatterns = [
     path("blog/taggedposts/<str:tag_name>", views.tagged, name="tagged"),
     # Leave a comment
     path("blog/post/comment/<int:post_id>", views.comment, name="comment"),
+    # About Me
+    path("aboutme", views.about, name="about"),
 ]
