@@ -66,6 +66,6 @@ class Comment(models.Model):
         return f"User: {self.user} posted the comment {self.comment} on the post {self.post.id} on {self.date}"
 
 
-# Remember to first run python manage.py makemigrations
+# Remember to first run python3 manage.py makemigrations
 # then python manage.py migrate
 # to migrate those changes to your database

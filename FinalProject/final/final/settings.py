@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from pathlib import Path
 import os
+import environ
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -27,8 +28,10 @@ SECRET_KEY = 'django-insecure-af+q6!ji2usr0q*hqb3i3votj&at@l*t4)9pxgt#12ee(6419!
 DEBUG = False
 
 ALLOWED_HOSTS = [
+    '0.0.0.0',
     '127.0.0.1',
-    '.herokuapp.com',
+    'boiling-tundra-04008.herokuapp.com',
+    'localhost',
 ]
 
 # Application definition
@@ -78,11 +81,18 @@ WSGI_APPLICATION = 'final.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
+env = environ.Env()
+environ.Env.read_env()
 
+'''To be inputted into Config Vars'''
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': env('POSTGRES_DB_NAME'),
+        'USER' : env('POSTGRES_USER'),
+        'PASSWORD' : env('POSTGRES_PASSWORD'),
+        'HOST' : env('POSTGRES_HOST'),
+        'POST': env('POSTGRES_PORT'),
     }
 }
 

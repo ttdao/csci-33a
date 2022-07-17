@@ -8,10 +8,10 @@
         <h2>{{ post.title }}</h2>
         <h4>{{ post.date }}</h4>
         <p>{{ post.content }}</p>
-    <h6>Tags: </h6>
-    {% for tag in post.tag.all %}
-        <span class="badge rounded-pill bg-info text-dark">{{ tag }}</span>
-    {% endfor %}
+        <h6>Tags: </h6>
+        {% for tag in post.tag.all %}
+            <span class="badge rounded-pill bg-info text-dark">{{ tag }}</span>
+        {% endfor %}
 
         <a href="{% url 'skilltracker:blog' %}">Back to Blog</a>
         {% if user.is_authenticated %}
@@ -34,10 +34,24 @@
                 </form>
             {% endif %}
         </div>
-    <br>
-<h5>{{ num }} Comments</h5>
+        <br>
+        <h5>{{ num }} Comments</h5>
         {% for comment in comments %}
-            <li> {{ comment.user }} - {{ comment.date }}: {{ comment.comment }}</li>
+
+            {#            <li> {{ comment.user }} - {{ comment.date }}: {{ comment.comment }}</li>#}
+            <div class="card">
+                <div class="card-body">{{ comment.comment }}
+                    {#                    <div class="d-flex justify-content-start py-2">#}
+                    {#                        <div class="second py-2 px-2"><span class="text1">{{ comment.comment }}</span>#}
+                    <div class="d-flex justify-content-between py-1 pt-2">
+                        <div class="card-footer">
+                            <div><span class="text2">by {{ comment.user }} at {{ comment.date }}</span></div>
+                        </div>
+                    </div>
+                    {#                        </div>#}
+                    {#                    </div>#}
+                </div>
+            </div>
         {% endfor %}
     </div>
 {% endblock %}

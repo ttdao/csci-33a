@@ -45,5 +45,7 @@ class CreateComment(forms.ModelForm):
         widgets = {
             'comment': forms.Textarea(attrs={'class': 'form-control',
                                              'placeholder': 'Leave a comment',
-                                             'aria-label': 'Leave a comment'}),
+                                             'aria-label': 'Leave a comment',
+                                             'cols': 5,
+                                             'rows': 5}),
         }
